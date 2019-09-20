@@ -12,8 +12,10 @@ See the labs on <https://azurecitadel.com/automation/packeransible>.
 
 Manual installation
 
-`sudo ansible-galaxy install --roles-path /etc/ansible/roles git+https://github.com/richeney/ansible-role-azure-ansible`
-`sudo mv /etc/ansible/roles/ansible-role-azure-ansible /etc/ansible/roles/azure_ansible`
+```bash
+sudo ansible-galaxy install --roles-path /etc/ansible/roles git+https://github.com/richeney/ansible-role-azure-ansible
+sudo mv /etc/ansible/roles/ansible-role-azure-ansible /etc/ansible/roles/azure_ansible
+```
 
 Or add an entry to requirements.yml and refer to that:
 
@@ -24,7 +26,7 @@ Or add an entry to requirements.yml and refer to that:
 ...
 ```
 
-`sudo ansible-galaxy install --roles-path /etc/ansible/roles --role-file requirements.yml
+`sudo ansible-galaxy install --roles-path /etc/ansible/roles --role-file requirements.yml`
 
 ## Example Playbook
 
