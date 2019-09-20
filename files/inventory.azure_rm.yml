@@ -1,0 +1,26 @@
+plugin: azure_rm
+auth_source: auto
+
+## include_vm_resource_groups:
+## - rg1
+## - rg2
+
+keyed_groups:
+# Generate 'tag_(tag name)_(tag value)' for each tag on a VM.
+- prefix: tag
+  key: tags
+# Generate 'loc_(location name)', depending on the VM's location
+- prefix: loc
+  key: location
+# Generate rg_(resource_group)
+- prefix: rg
+  key: resource_group
+# Generate vm_size_(vm_size)
+- prefix: vm_size
+  key: virtual_machine_size
+# Generate os_type_(os_type)
+- prefix: os
+  key: os_disk.operating_system_type
+## # Generate 'owner__(owner value)'
+## - prefix: owner
+##   key: tags.owner | default('none')

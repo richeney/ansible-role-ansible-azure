@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  role_name: azure_ansible
+  author: richeney
+  description: This role installs the Azure version of Ansible, plus a default dynamic inventory file. Intended for Packer builds of configuration management images as per the labs on https://azurecitadel.com/automation/packeransible.
+  company: "None"
+  license: "MIT"
+  min_ansible_version: 2.4
+  platforms:
+  - name: Ubuntu
+    versions:
+      - xenial
+      - bionic
+  galaxy_tags:
+    - cloud
+    - microsoft
+    - azure
+    - ansible
+    - packer
+
+dependencies: []
+
+...

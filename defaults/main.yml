@@ -1,0 +1,19 @@
+---
+# defaults
+
+files:
+  - ansible.cfg
+  - example_playbook.yml
+  - inventory.azure_rm.yml
+
+roles:
+  - src: https://github.com/richeney/ansible-role-common
+    name: common
+  - src: https://github.com/richeney/ansible-role-azure-cli
+    name: azure_cli
+  - src: geerlingguy.pip
+    name: pip
+  - src: geerlingguy.docker
+    name: docker
+
+...

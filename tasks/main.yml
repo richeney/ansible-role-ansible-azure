@@ -1,0 +1,75 @@
+---
+# Install the Azure version of Ansible
+# Based on <https://docs.microsoft.com/en-us/azure/virtual-machines/linux/ansible-install-configure#ubuntu-1604-lts>
+# Then creates an ansible group, and adds default files for config and dynamic inventory
+# If a valid requirements list is specified then a requirements.yml is created and the roles are installed
+
+- name: Add the Ansible software repository
+  apt_repository:
+    repo: "ppa:ansible/ansible"
+    state: present
+
+- name: Get packages needed for the install process
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+      - libssl-dev
+      - libffi-dev
+      - python-dev
+      - python-pip
+  when: ansible_os_family == 'Debian'
+
+- name: Import the Microsoft signing key into apt
+  apt_key:
+    url: "{{ repo_key_url }}"
+    state: present
+
+- name: Install Azure version of Ansible via pip
+  pip:
+    name: "ansible[azure]"
+
+- name: Add ansible group
+  group:
+    name: ansible
+    state: present
+
+- name: Copy files to /etc/ansible, writable by ansible group
+  file:
+    src: "files/{{ item }}"
+    dest: "/etc/ansible/{{ item }}"
+    owner: root
+    group: ansible
+    mode: '0664'
+  loop: "{{ files }}"
+
+- name: Check existence of requirement.yml to avoid overwrite
+  stat:
+    path: /etc/ansible/requirements.yml
+    register: requirements
+
+- name: Create requirements.yml and download files if there is a list of roles and file does not already exist
+  block:
+    - name: Create requirements.yml from template
+      template:
+        src: templates/requirements.j2
+        dest: /etc/ansible/requirements.yml
+        owner: root
+        group: ansible
+        mode: 0775
+    - name: Create roles directory
+      file:
+        path: /etc/ansible/roles
+        state: directory
+        owner: root
+        group: ansible
+        mode: 0775
+    - name: Install roles
+      command: /usr/local/bin/ansible-galaxy install --role-file /etc/ansible/requirements.yml --roles-path=/etc/ansible/roles
+  when: roles is defined and (roles|length>0) and requirements.stat.exists == False
+
+
+
+...
