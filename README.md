@@ -10,7 +10,21 @@ See the labs on <https://azurecitadel.com/automation/packeransible>.
 
 ## Installation
 
-`ansible-galaxy install richeney.azure-ansible`
+Manual installation
+
+`sudo ansible-galaxy install --roles-path /etc/ansible/roles git+https://github.com/richeney/ansible-role-azure-ansible`
+`sudo mv /etc/ansible/roles/ansible-role-azure-ansible /etc/ansible/roles/azure_ansible`
+
+Or add an entry to requirements.yml and refer to that:
+
+```yaml
+---
+- src: https://github.com/richeney/ansible-role-azure-ansible
+  name: azure_ansible
+...
+```
+
+`sudo ansible-galaxy install --roles-path /etc/ansible/roles --role-file requirements.yml
 
 ## Example Playbook
 
