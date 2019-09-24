@@ -1,12 +1,12 @@
 # Install Azure CLI
 
-Ansible role to install the Azure version of Ansible. Intended for use by Packer using the standard local Ansible provisioner.
+Ansible role to install the Azure version of Ansible. Intended for use by Packer using the standard local Ansible provisioner, so that the image may be deployed to a new subscription and used as a config management host.
 
-Includes a default dynamic inventory file.
+Includes a default dynamic inventory file. Does not clobber existing files.
 
-Requires separate credential file or managed instance.
+Note that this role is currently configured for managed instance, and adds `export ANSIBLE_AZURE_AUTH_SOURCE=msi` to the .profile and .bashrc files in /etc/skel.  Ensure that the resulting VM image is deployed with managed instance access to the subscription.
 
-See the labs on <https://azurecitadel.com/automation/packeransible>.
+As used by the labs on <https://azurecitadel.com/automation/packeransible>.
 
 ## Installation
 

@@ -18,14 +18,9 @@
     packages:
       - libssl-dev
       - libffi-dev
-      - python-dev
-      - python-pip
+      - python3-dev
+      - python3-pip
   when: ansible_os_family == 'Debian'
-
-- name: Import the Microsoft signing key into apt
-  apt_key:
-    url: "{{ repo_key_url }}"
-    state: present
 
 - name: Install Azure version of Ansible via pip
   pip:
@@ -36,19 +31,26 @@
     name: ansible
     state: present
 
-- name: Copy files to /etc/ansible, writable by ansible group
+- name: Create /etc/ansible directory
   file:
+    path: /etc/ansible
+    state: directory
+    mode: '0755'
+
+- name: Copy files to /etc/ansible, writable by ansible group
+  copy:
     src: "files/{{ item }}"
     dest: "/etc/ansible/{{ item }}"
     owner: root
     group: ansible
     mode: '0664'
+    force: no
   loop: "{{ files }}"
 
-- name: Check existence of requirement.yml to avoid overwrite
+- name: Check existence of requirements.yml to avoid overwrite
   stat:
     path: /etc/ansible/requirements.yml
-    register: requirements
+  register: requirements_file
 
 - name: Create requirements.yml and download files if there is a list of roles and file does not already exist
   block:
@@ -68,8 +70,16 @@
         mode: 0775
     - name: Install roles
       command: /usr/local/bin/ansible-galaxy install --role-file /etc/ansible/requirements.yml --roles-path=/etc/ansible/roles
-  when: roles is defined and (roles|length>0) and requirements.stat.exists == False
+  when: requirements is defined and (requirements|length>0) and requirements_file.stat.exists == False
 
+- name: Add environment variable for Managed Identity to the skeleton files
+  lineinfile:
+    dest: /etc/skel/{{ item }}
+    line: "export ANSIBLE_AZURE_AUTH_SOURCE=msi"
+    state: present
+  loop:
+    - .profile
+    - .bashrc
 
 
 ...
