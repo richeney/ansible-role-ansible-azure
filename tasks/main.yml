@@ -36,9 +36,19 @@
   file:
     path: /etc/ansible
     state: directory
-    mode: '0755'
+    mode: '2775'
+    group: ansible
 
-- name: Copy files to /etc/ansible, writable by ansible group
+- name: Set default ACL on /etc/ansible
+  acl:
+    path: /etc/ansible
+    entry: "{{ item }}"
+    state: present
+  loop:
+      - default:group::rwX
+      - default:other::r-X
+
+- name: Copy files to /etc/ansible
   copy:
     src: "files/{{ item }}"
     dest: "/etc/ansible/{{ item }}"
@@ -81,6 +91,5 @@
   loop:
     - .profile
     - .bashrc
-
 
 ...
