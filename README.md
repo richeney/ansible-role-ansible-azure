@@ -31,9 +31,31 @@ Or add an entry to requirements.yml and refer to that:
 ## Example Playbook
 
 ```yaml
+---
+# Master playbook to test custom role to install Ansible
 - hosts: all
+  become: yes
   roles:
-    - azure_ansible
+      - role: azure_ansible
+  vars:
+    files:
+      - ansible.cfg
+      - example_playbook.yml
+      - inventory.azure_rm.yml
+    requirements:
+      - src: https://github.com/richeney/ansible-role-common
+        name: common
+      - src: https://github.com/richeney/ansible-role-azure-cli
+        name: azure_cli
+      - src: geerlingguy.pip
+        name: pip
+      - src: geerlingguy.docker
+        name: docker
+      - src: darkwizard242.terraform
+        name: terraform
+      - src: darkwizard242.packer
+        name: packer
+...
 ```
 
 ## Requirements
