@@ -4,6 +4,11 @@
 # Then creates an ansible group, and adds default files for config and dynamic inventory
 # If a valid requirements list is specified then a requirements.yml is created and the roles are installed
 
+- name: Avoid apt list lock errors
+  raw:
+    name: Loop until apt list lock becomes free
+    raw: while fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do echo 'Waiting for apt list lock.' && sleep 10; done
+
 - name: Add the Ansible software repository
   apt_repository:
     repo: "ppa:ansible/ansible"
