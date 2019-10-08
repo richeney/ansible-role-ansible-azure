@@ -97,6 +97,10 @@
   loop: "{{ required_playbooks }}"
   vars:
     raw_url_path: "{{ playbook_repo | regex_replace('github.com', 'raw.githubusercontent.com') }}/master"
+  when:
+    - playbook_repo is defined
+    - required_playbooks is defined
+    - required_playbooks | length > 0
 
 - name: Add environment variable for Managed Identity to the skeleton files
   lineinfile:
