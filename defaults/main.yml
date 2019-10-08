@@ -6,14 +6,15 @@ files:
   - example_playbook.yml
   - inventory.azure_rm.yml
 
-requirements:
+required_roles:
   - src: https://github.com/richeney/ansible-role-common
     name: common
   - src: https://github.com/richeney/ansible-role-azure-cli
     name: azure_cli
-#  - src: geerlingguy.pip
-#    name: pip
-#  - src: geerlingguy.docker
-#    name: docker
 
+
+playbook_repo: https://github.com/richeney/ansible-playbooks
+
+required_playbooks:
+  - docker.yml
 ...

@@ -88,6 +88,16 @@
       command: /usr/local/bin/ansible-galaxy install --role-file /etc/ansible/requirements.yml --roles-path=/etc/ansible/roles
   when: requirements is defined and (requirements|length>0) and requirements_file.stat.exists == False
 
+- name: Download required_playbooks to /etc/ansible
+  get_url:
+    url: "{{ raw_url_path }}/{{ item }}"
+    dest: /etc/ansible
+    mode: 0664
+    group: ansible
+  loop: "{{ required_playbooks }}"
+  vars:
+    raw_url_path: "{{ playbook_repo | regex_replace('github.com', 'raw.githubusercontent.com') }}/master"
+
 - name: Add environment variable for Managed Identity to the skeleton files
   lineinfile:
     dest: /etc/skel/{{ item }}

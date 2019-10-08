@@ -1,6 +1,6 @@
 {# Generate standard requirements.yml file based on list of requirements #}
 ---
-{% for role in requirements %}
+{% for role in required_roles %}
   - src: {{ role.src }}
     name: {{ role.name }}
 {% endfor %}
